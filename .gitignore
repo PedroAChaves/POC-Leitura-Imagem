@@ -7,3 +7,5 @@
 *.vsidx
 bin/
 obj/
+packages/
+

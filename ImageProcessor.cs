@@ -13,24 +13,25 @@ class ImageProcessor
     {
         using (Bitmap imagemOriginal = new Bitmap(caminhoImagem))
         {
-            Bitmap imagemProcessada = new Bitmap(imagemOriginal.Width, imagemOriginal.Height, PixelFormat.Format24bppRgb);
+            Bitmap imagemSaturada = AumentarSaturacao(imagemOriginal, 1.5f);
+            Bitmap imagemProcessada = new Bitmap(imagemSaturada.Width, imagemSaturada.Height, PixelFormat.Format24bppRgb);
 
-            Rectangle rect = new Rectangle(0, 0, imagemOriginal.Width, imagemOriginal.Height);
+            Rectangle rect = new Rectangle(0, 0, imagemSaturada.Width, imagemSaturada.Height);
 
-            BitmapData dataOriginal = imagemOriginal.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+            BitmapData dataOriginal = imagemSaturada.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
             BitmapData dataProcessada = imagemProcessada.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
 
             int stride = dataOriginal.Stride;
-            int bytes = stride * imagemOriginal.Height;
+            int bytes = stride * imagemSaturada.Height;
             byte[] bufferOriginal = new byte[bytes];
             byte[] bufferProcessado = new byte[bytes];
 
             Marshal.Copy(dataOriginal.Scan0, bufferOriginal, 0, bytes);
-            imagemOriginal.UnlockBits(dataOriginal);
+            imagemSaturada.UnlockBits(dataOriginal);
 
-            for (int y = 0; y < imagemOriginal.Height; y++)
+            for (int y = 0; y < imagemSaturada.Height; y++)
             {
-                for (int x = 0; x < imagemOriginal.Width; x++)
+                for (int x = 0; x < imagemSaturada.Width; x++)
                 {
                     int index = y * stride + x * 3;
                     byte b = bufferOriginal[index];
@@ -40,9 +41,9 @@ class ImageProcessor
                     bool ehVermelho = r > 170 && g < 140 && b < 145;
                     byte cor = (byte)(ehVermelho ? 0 : 255);
 
-                    bufferProcessado[index] = cor;       
-                    bufferProcessado[index + 1] = cor;   
-                    bufferProcessado[index + 2] = cor;   
+                    bufferProcessado[index] = cor;
+                    bufferProcessado[index + 1] = cor;
+                    bufferProcessado[index + 2] = cor;
                 }
             }
 
@@ -56,9 +57,9 @@ class ImageProcessor
 
             string mensagemImagemProcessada = "";
 
-            string caminhoTemporario = $@"C:\Temp\imagem_processada_{DateTime.Now:yyyyMMdd_HHmmss}.jpg";
-            imagemFinal.Save(caminhoTemporario, System.Drawing.Imaging.ImageFormat.Jpeg);
-            Console.WriteLine($"Imagem processada salva em: {caminhoTemporario}");
+            //string caminhoTemporario = $@"C:\\Temp\\imagem_processada_{DateTime.Now:yyyyMMdd_HHmmss}.jpg";
+            //imagemFinal.Save(caminhoTemporario, System.Drawing.Imaging.ImageFormat.Jpeg);
+            //Console.WriteLine($"Imagem processada salva em: {caminhoTemporario}");
 
             if (!string.IsNullOrEmpty(caminhoErro))
             {
@@ -71,6 +72,98 @@ class ImageProcessor
             }
 
             return (imagemFinal, mensagemImagemProcessada);
+        }
+    }
+
+    private static Bitmap AumentarSaturacao(Bitmap img, float fator)
+    {
+        Bitmap novaImagem = new Bitmap(img.Width, img.Height, PixelFormat.Format24bppRgb);
+        Rectangle rect = new Rectangle(0, 0, img.Width, img.Height);
+
+        BitmapData dataOriginal = img.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+        BitmapData dataNova = novaImagem.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+
+        int stride = dataOriginal.Stride;
+        int bytes = stride * img.Height;
+        byte[] buffer = new byte[bytes];
+
+        Marshal.Copy(dataOriginal.Scan0, buffer, 0, bytes);
+
+        for (int y = 0; y < img.Height; y++)
+        {
+            for (int x = 0; x < img.Width; x++)
+            {
+                int index = y * stride + x * 3;
+                byte b = buffer[index];
+                byte g = buffer[index + 1];
+                byte r = buffer[index + 2];
+
+                Color cor = Color.FromArgb(r, g, b);
+                float hue = cor.GetHue();
+                float sat = Math.Min(cor.GetSaturation() * fator, 1.0f);
+                float bright = cor.GetBrightness();
+
+                Color novaCor = FromAhsb(255, hue, sat, bright);
+
+                buffer[index] = novaCor.B;
+                buffer[index + 1] = novaCor.G;
+                buffer[index + 2] = novaCor.R;
+            }
+        }
+
+        Marshal.Copy(buffer, 0, dataNova.Scan0, bytes);
+        img.UnlockBits(dataOriginal);
+        novaImagem.UnlockBits(dataNova);
+
+        return novaImagem;
+    }
+
+    private static Color FromAhsb(int a, float h, float s, float b)
+    {
+        if (s == 0)
+        {
+            int v = (int)(b * 255);
+            return Color.FromArgb(a, v, v, v);
+        }
+
+        float fMax, fMid, fMin;
+        int iSextant;
+        if (b < 0.5)
+        {
+            fMax = b + b * s;
+        }
+        else
+        {
+            fMax = b + s - b * s;
+        }
+
+        fMin = 2 * b - fMax;
+
+        h /= 60f;
+        iSextant = (int)Math.Floor(h);
+        float f = h - iSextant;
+        if ((iSextant & 1) == 0)
+        {
+            fMid = fMin + f * (fMax - fMin);
+        }
+        else
+        {
+            fMid = fMax - f * (fMax - fMin);
+        }
+
+        int iMax = (int)(fMax * 255);
+        int iMid = (int)(fMid * 255);
+        int iMin = (int)(fMin * 255);
+
+        switch (iSextant)
+        {
+            case 0: return Color.FromArgb(a, iMax, iMid, iMin);
+            case 1: return Color.FromArgb(a, iMid, iMax, iMin);
+            case 2: return Color.FromArgb(a, iMin, iMax, iMid);
+            case 3: return Color.FromArgb(a, iMin, iMid, iMax);
+            case 4: return Color.FromArgb(a, iMid, iMin, iMax);
+            case 5: return Color.FromArgb(a, iMax, iMin, iMid);
+            default: return Color.FromArgb(a, 0, 0, 0);
         }
     }
 
@@ -305,14 +398,9 @@ class ImageProcessor
 
         imagem.Dispose();
 
-        if (resultado.Length <= 5)
+        if (resultado.Length > 8)
         {
-            resultadoOCR.Erro = "Auto identificado com menos de 6 dígitos.";
-            return resultadoOCR;
-        }
-        else if (resultado.Length > 7)
-        {
-            resultadoOCR.Erro = "Auto identificado com mais de 7 dígitos.";
+            resultadoOCR.Erro = "Auto identificado com mais de 8 dígitos.";
             return resultadoOCR;
         }
 

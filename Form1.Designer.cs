@@ -44,9 +44,8 @@
             this.btnSelecionarPastaImagem = new System.Windows.Forms.Button();
             this.txtDestinoImagem = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.txtIntervalo1 = new System.Windows.Forms.TextBox();
+            this.txtNumeroLote = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.txtIntervalo2 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -64,7 +63,7 @@
             // 
             this.btnSelecionarPasta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSelecionarPasta.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSelecionarPasta.Location = new System.Drawing.Point(496, 156);
+            this.btnSelecionarPasta.Location = new System.Drawing.Point(496, 186);
             this.btnSelecionarPasta.Name = "btnSelecionarPasta";
             this.btnSelecionarPasta.Size = new System.Drawing.Size(76, 28);
             this.btnSelecionarPasta.TabIndex = 14;
@@ -76,7 +75,7 @@
             // 
             this.txtOrigem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtOrigem.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOrigem.Location = new System.Drawing.Point(12, 156);
+            this.txtOrigem.Location = new System.Drawing.Point(12, 186);
             this.txtOrigem.Multiline = true;
             this.txtOrigem.Name = "txtOrigem";
             this.txtOrigem.Size = new System.Drawing.Size(488, 28);
@@ -86,7 +85,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(8, 133);
+            this.label4.Location = new System.Drawing.Point(8, 163);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(327, 20);
             this.label4.TabIndex = 12;
@@ -96,7 +95,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 412);
+            this.label3.Location = new System.Drawing.Point(12, 487);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(123, 24);
             this.label3.TabIndex = 41;
@@ -106,7 +105,7 @@
             // 
             this.logSaida.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logSaida.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.logSaida.Location = new System.Drawing.Point(12, 439);
+            this.logSaida.Location = new System.Drawing.Point(12, 514);
             this.logSaida.Multiline = true;
             this.logSaida.Name = "logSaida";
             this.logSaida.ReadOnly = true;
@@ -116,7 +115,7 @@
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(177, 355);
+            this.progressBar.Location = new System.Drawing.Point(177, 430);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(258, 31);
             this.progressBar.TabIndex = 39;
@@ -125,7 +124,7 @@
             // 
             this.btnLimpar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLimpar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLimpar.Location = new System.Drawing.Point(441, 355);
+            this.btnLimpar.Location = new System.Drawing.Point(441, 430);
             this.btnLimpar.Name = "btnLimpar";
             this.btnLimpar.Size = new System.Drawing.Size(69, 31);
             this.btnLimpar.TabIndex = 38;
@@ -137,7 +136,7 @@
             // 
             this.btnSair.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSair.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSair.Location = new System.Drawing.Point(516, 355);
+            this.btnSair.Location = new System.Drawing.Point(516, 430);
             this.btnSair.Name = "btnSair";
             this.btnSair.Size = new System.Drawing.Size(56, 31);
             this.btnSair.TabIndex = 37;
@@ -149,7 +148,7 @@
             // 
             this.btnRealizarOperacao.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRealizarOperacao.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRealizarOperacao.Location = new System.Drawing.Point(12, 355);
+            this.btnRealizarOperacao.Location = new System.Drawing.Point(12, 430);
             this.btnRealizarOperacao.Name = "btnRealizarOperacao";
             this.btnRealizarOperacao.Size = new System.Drawing.Size(159, 31);
             this.btnRealizarOperacao.TabIndex = 36;
@@ -161,7 +160,7 @@
             // 
             this.btnSelecionarPastaLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSelecionarPastaLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSelecionarPastaLog.Location = new System.Drawing.Point(496, 226);
+            this.btnSelecionarPastaLog.Location = new System.Drawing.Point(496, 288);
             this.btnSelecionarPastaLog.Name = "btnSelecionarPastaLog";
             this.btnSelecionarPastaLog.Size = new System.Drawing.Size(76, 28);
             this.btnSelecionarPastaLog.TabIndex = 44;
@@ -173,7 +172,7 @@
             // 
             this.txtDestinoLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDestinoLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDestinoLog.Location = new System.Drawing.Point(12, 226);
+            this.txtDestinoLog.Location = new System.Drawing.Point(12, 288);
             this.txtDestinoLog.Multiline = true;
             this.txtDestinoLog.Name = "txtDestinoLog";
             this.txtDestinoLog.Size = new System.Drawing.Size(488, 28);
@@ -183,7 +182,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(8, 203);
+            this.label2.Location = new System.Drawing.Point(8, 265);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(329, 20);
             this.label2.TabIndex = 42;
@@ -193,7 +192,7 @@
             // 
             this.btnSelecionarPastaImagem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSelecionarPastaImagem.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSelecionarPastaImagem.Location = new System.Drawing.Point(496, 294);
+            this.btnSelecionarPastaImagem.Location = new System.Drawing.Point(496, 371);
             this.btnSelecionarPastaImagem.Name = "btnSelecionarPastaImagem";
             this.btnSelecionarPastaImagem.Size = new System.Drawing.Size(76, 28);
             this.btnSelecionarPastaImagem.TabIndex = 47;
@@ -205,7 +204,7 @@
             // 
             this.txtDestinoImagem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDestinoImagem.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDestinoImagem.Location = new System.Drawing.Point(12, 294);
+            this.txtDestinoImagem.Location = new System.Drawing.Point(12, 371);
             this.txtDestinoImagem.Multiline = true;
             this.txtDestinoImagem.Name = "txtDestinoImagem";
             this.txtDestinoImagem.Size = new System.Drawing.Size(488, 28);
@@ -215,60 +214,51 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(8, 271);
+            this.label5.Location = new System.Drawing.Point(8, 348);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(467, 20);
             this.label5.TabIndex = 45;
             this.label5.Text = "Selecione o caminho das imagens processadas em caso de erro:";
             // 
-            // txtIntervalo1
+            // txtNumeroLote
             // 
-            this.txtIntervalo1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtIntervalo1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtIntervalo1.Location = new System.Drawing.Point(12, 93);
-            this.txtIntervalo1.Multiline = true;
-            this.txtIntervalo1.Name = "txtIntervalo1";
-            this.txtIntervalo1.Size = new System.Drawing.Size(119, 28);
-            this.txtIntervalo1.TabIndex = 49;
+            this.txtNumeroLote.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtNumeroLote.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNumeroLote.Location = new System.Drawing.Point(12, 111);
+            this.txtNumeroLote.Multiline = true;
+            this.txtNumeroLote.Name = "txtNumeroLote";
+            this.txtNumeroLote.Size = new System.Drawing.Size(218, 28);
+            this.txtNumeroLote.TabIndex = 49;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(8, 70);
+            this.label6.Location = new System.Drawing.Point(8, 88);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(243, 20);
+            this.label6.Size = new System.Drawing.Size(222, 20);
             this.label6.TabIndex = 48;
-            this.label6.Text = "Intervalo de auto a ser analisado:";
-            // 
-            // txtIntervalo2
-            // 
-            this.txtIntervalo2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtIntervalo2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtIntervalo2.Location = new System.Drawing.Point(161, 93);
-            this.txtIntervalo2.Multiline = true;
-            this.txtIntervalo2.Name = "txtIntervalo2";
-            this.txtIntervalo2.Size = new System.Drawing.Size(119, 28);
-            this.txtIntervalo2.TabIndex = 50;
+            this.label6.Text = "Informe o lote a ser analisado:";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(137, 95);
+            this.label7.BackColor = System.Drawing.SystemColors.Control;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.Red;
+            this.label7.Location = new System.Drawing.Point(9, 217);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(18, 20);
-            this.label7.TabIndex = 51;
-            this.label7.Text = "a";
+            this.label7.Size = new System.Drawing.Size(348, 16);
+            this.label7.TabIndex = 50;
+            this.label7.Text = "Obs: o número máximo de arquivos para processar é 100";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(591, 567);
+            this.ClientSize = new System.Drawing.Size(589, 638);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.txtIntervalo2);
-            this.Controls.Add(this.txtIntervalo1);
+            this.Controls.Add(this.txtNumeroLote);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.btnSelecionarPastaImagem);
             this.Controls.Add(this.txtDestinoImagem);
@@ -311,9 +301,8 @@
         private System.Windows.Forms.Button btnSelecionarPastaImagem;
         private System.Windows.Forms.TextBox txtDestinoImagem;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txtIntervalo1;
+        private System.Windows.Forms.TextBox txtNumeroLote;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox txtIntervalo2;
         private System.Windows.Forms.Label label7;
     }
 }

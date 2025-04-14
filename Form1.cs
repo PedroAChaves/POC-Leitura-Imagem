@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,12 +27,14 @@ namespace POC_Leitura_Imagem
 
         private async void btnRealizarOperacao_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(txtIntervalo1.Text, out int intervaloMin) ||
-                !int.TryParse(txtIntervalo2.Text, out int intervaloMax))
+            if (!int.TryParse(txtNumeroLote.Text, out int numeroLote))
             {
-                MessageBox.Show("Intervalos inválidos. Certifique-se de que ambos os intervalos são números inteiros.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Número do lote inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            var repo = new RegistroOCRRepository();
+            var autosValidos = repo.ObterAutosPorLote(numeroLote);
 
             string caminhoPasta = txtOrigem.Text;
             string destinoLog = txtDestinoLog.Text;
@@ -41,7 +42,6 @@ namespace POC_Leitura_Imagem
             int count = 0;
             int acertos = 0;
             string logTexto = "";
-
 
             if (string.IsNullOrEmpty(caminhoPasta) || !Directory.Exists(caminhoPasta))
             {
@@ -67,6 +67,12 @@ namespace POC_Leitura_Imagem
                     return;
                 }
 
+                if (arquivos.Length > 100)
+                {
+                    MessageBox.Show("Não é possível realizar o processamento de mais de 100 arquivos.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
                 progressBar.Value = 0;
                 progressBar.Maximum = arquivos.Length;
                 logSaida.AppendText($"📂 Processando {arquivos.Length} arquivos na pasta: {caminhoPasta}" + Environment.NewLine);
@@ -89,20 +95,23 @@ namespace POC_Leitura_Imagem
 
                         if (resultadoOCR.Sucesso)
                         {
-                            if (int.TryParse(resultadoOCR.Numero, out int numeroExtraido) &&
-                            (numeroExtraido < intervaloMin || numeroExtraido > intervaloMax))
+                            if (int.TryParse(resultadoOCR.Numero, out int numeroExtraido))
                             {
-                                string mensagemErro = $"❌ Número fora do intervalo permitido: {numeroExtraido} (Intervalo: {intervaloMin} - {intervaloMax})";
-                                logSaida.AppendText(mensagemErro + Environment.NewLine);
-                                logTexto += mensagemErro + Environment.NewLine;
-
-                                if (!string.IsNullOrEmpty(msgSalvo))
+                                if (!autosValidos.Contains(numeroExtraido))
                                 {
-                                    logSaida.AppendText(msgSalvo + Environment.NewLine);
-                                    logTexto += msgSalvo + Environment.NewLine;
-                                }
+                                    string mensagemErro = $"❌ Auto inválido: {numeroExtraido} não pertence ao lote {numeroLote}.";
+                                    logSaida.AppendText(mensagemErro + Environment.NewLine);
+                                    logTexto += mensagemErro + Environment.NewLine;
 
-                                continue;
+                                    (_, msgSalvo) = await Task.Run(() => ImageProcessor.ProcessarImagem(caminhoImagem, destinoImagem));
+                                    if (!string.IsNullOrEmpty(msgSalvo))
+                                    {
+                                        logSaida.AppendText(msgSalvo + Environment.NewLine);
+                                        logTexto += msgSalvo + Environment.NewLine;
+                                    }
+
+                                    continue;
+                                }
                             }
 
                             acertos++;
@@ -122,9 +131,21 @@ namespace POC_Leitura_Imagem
                             }
                             else
                             {
-                                string mensagemPulado = $"⚠️ Já existe um arquivo com este nome. Pulando...";
-                                logSaida.AppendText(mensagemPulado + Environment.NewLine);
-                                logTexto += mensagemPulado + Environment.NewLine;
+                                string extensao = Path.GetExtension(caminhoImagem);
+                                string nomeConflito1 = $"CONFLITO_{resultadoOCR.Numero}_1{extensao}";
+                                string nomeConflito2 = $"CONFLITO_{resultadoOCR.Numero}_2{extensao}";
+                                string caminhoConflito1 = Path.Combine(Path.GetDirectoryName(novaImagem), nomeConflito1);
+                                string caminhoConflito2 = Path.Combine(Path.GetDirectoryName(novaImagem), nomeConflito2);
+
+                                File.Move(novaImagem, caminhoConflito1);
+                                File.Move(caminhoImagem, caminhoConflito2);
+
+                                string mensagemConflito = $"🚨 CONFLITO CRÍTICO: O número {resultadoOCR.Numero} já existia como nome de outro arquivo. Ambos foram renomeados como CONFLITO.";
+                                logSaida.AppendText(mensagemConflito + Environment.NewLine);
+                                logTexto += mensagemConflito + Environment.NewLine;
+
+                                logSaida.AppendText($"📁 Arquivos: {nomeConflito1} e {nomeConflito2}" + Environment.NewLine);
+                                logTexto += $"📁 Arquivos: {nomeConflito1} e {nomeConflito2}" + Environment.NewLine;
                             }
                         }
                         else
@@ -166,10 +187,14 @@ namespace POC_Leitura_Imagem
                 logTexto += tempoTotal + Environment.NewLine;
 
                 double porcentagemAcerto = ((double)acertos / arquivos.Length) * 100;
-                string resumoFinal = $"📊 Arquivos lidos: {arquivos.Length} | Acertos: {acertos} ({porcentagemAcerto:F2}%)";
+                double arquivosErros = (arquivos.Length - (double)acertos) ;
+                string resumoFinal = $"📊 Arquivos lidos: {arquivos.Length} | Não identificados: {arquivosErros}";
+                string resumoAcertos = $"✅ Porcentagem de leitura: ({porcentagemAcerto:F2}%)";
 
                 logSaida.AppendText(Environment.NewLine + resumoFinal + Environment.NewLine);
                 logTexto += Environment.NewLine + resumoFinal + Environment.NewLine;
+                logSaida.AppendText(Environment.NewLine + resumoAcertos + Environment.NewLine);
+                logTexto += Environment.NewLine + resumoAcertos + Environment.NewLine;
 
                 progressBar.Value = progressBar.Maximum;
                 progressBar.Value = 0;
@@ -194,6 +219,7 @@ namespace POC_Leitura_Imagem
             txtOrigem.Clear();
             txtDestinoLog.Clear();
             txtDestinoImagem.Clear();
+            txtNumeroLote.Clear();
             logSaida.Clear();
             progressBar.Value = 0;
         }
